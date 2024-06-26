@@ -1,0 +1,25 @@
+{
+    "users": {
+        "user1": {
+            "password": "a",
+            "email": "user1@example.com",
+            "full_name": "User One",
+            "balance": 6,
+            "ps": "https://www.roblox.com/games/2788229376?privateServerLinkCode=14728054560467411923214787300564"
+        },
+        "bob": {
+            "password": "ab",
+            "email": "luisereyes1010@gmail.com",
+            "full_name": "luis reyes",
+            "balance": 0,
+            "ps": ""
+        },
+        "abg": {
+            "password": "abcd",
+            "email": "admin@gmail.com",
+            "full_name": "abf aaa",
+            "balance": 5,
+            "ps": ""
+        }
+    }
+}

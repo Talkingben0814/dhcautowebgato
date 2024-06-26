@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropping</title>
+    <link rel="icon" type="image/webp" href="https://cdn.discordapp.com/emojis/1022812333749305425.webp?size=96&quality=lossless">
+    <style>
+        /* Apply CSS to the entire HTML and body for full coverage */
+        html, body {
+            height: 100%; /* Ensure HTML and body take up full viewport height */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+            font-family: Arial, sans-serif; /* Example font-family */
+            display: flex; /* Use flexbox to center content vertically and horizontally */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            background-image: url('https://cdn.discordapp.com/attachments/1030275179852607508/1254994310546591838/robux.jpg?ex=667b8408&is=667a3288&hm=86c07a1f5c1ad50c5cc0f9417948f88a3fa11eb8c5f7c6c65de0f168fde446ad&');
+            background-size: cover; /* Ensure the image covers the entire background */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Prevent the background image from repeating */
+            background-attachment: fixed; /* Fix the background image to prevent scrolling */
+        }
+
+        .frame {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 20px;
+            text-align: center;
+            max-width: 80%; /* Adjust the width of the frame */
+        }
+
+        .frame-text {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .frame-link {
+            display: block;
+            font-size: 18px;
+            margin-top: 20px;
+            text-decoration: none;
+            color: blue; /* Change link color as needed */
+        }
+
+        .home-button {
+            display: inline-block;
+            background-color: #4CAF50; /* Green background color */
+            color: white; /* White text color */
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="d45a6562-de7d-4e13-a9c0-60fbeb004ecf";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+    <div class="frame">
+        <p class="frame-text">Your DaHoodCash has started dropping successfully</p>
+        <a class="frame-link" href='{{ user.ps }}' target="_blank">Link: {{ user.ps }}</a>
+        
+        <!-- Home button linking to /dashboard -->
+        <a class="home-button" href="/dashboard">Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="icon" type="image/webp" href="https://cdn.discordapp.com/emojis/1022812333749305425.webp?size=96&quality=lossless">
+    <link href="https://cdn.sellix.io/static/css/embed.css" rel="stylesheet">
+    <style>
+        /* Reset and base styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://cdn.discordapp.com/attachments/1030275179852607508/1254859882834956288/evening-landscape-minimal-4k-kl-1920x1080.jpg?ex=667b06d6&is=6679b556&hm=7a86c034c9382a06231ad89c74ca178d6cb62d39d0f8780422a0cd52290bc879');
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 128, 0, 0.4); /* Adjust the color and opacity (RGBA) */
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: .rgba(0,0,0,0.4);
+            padding-top: 60px; /* Adjust as needed */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px; /* Adjust width as needed */
+            text-align: center;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        button {
+            padding: 10px 50px; /* Increase padding for larger buttons */
+            font-size: 18px; /* Increase font size for better readability */
+            border-radius: 8px; /* Rounded corners for buttons */
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            margin: 10px auto; /* Add margin for spacing between buttons and auto for horizontal centering */
+            display: block; /* Ensure buttons are block elements */
+            text-decoration: none; /* Remove default underline */
+            width: fit-content; /* Adjust width based on content */
+        }
+
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Specific button styles */
+        .buy-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .buy-button:hover {
+            background-color: #45a049;
+        }
+
+        .submit-button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Wallet balance display */
+        .wallet-balance {
+            position: absolute;
+            top: 10px; /* Adjust top position as needed */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally */
+            display: flex;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            z-index: 1000; /* Ensure it is above other content */
+        }
+
+        #walletImage {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        #currencySymbol,
+        #walletBalanceValue {
+            color: green; /* Green color for currency and balance */
+        }
+
+        /* Main content area */
+        .content {
+            margin-left: 250px; /* Adjust according to sidebar width */
+            padding: 20px;
+            position: relative; /* Ensure relative positioning for absolute elements */
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Sidebar navigation styles */
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            padding-top: 20px;
+        }
+
+        .sidebar-header {
+            padding: 10px 15px;
+            background-color: #00000000;
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .menu {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #444;
+        }
+
+        .menu li a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        .menu li a:hover {
+            background-color: #555;
+        }
+
+        /* Additional styling for form elements */
+        .form-container {
+            margin-top: 40px; /* Adjust top margin as needed */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* Vertical gap between form elements */
+        }
+
+        form button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            margin-top: 80px; /* Adjust margin to push "Make a Payment" further down */
+        }
+        .robux-box {
+            display: inline-block; /* Ensures it behaves like an inline element */
+            padding: 10px 20px; /* Adjust padding as needed */
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #45a049; /* Border color */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #45a049; /* Background color */
+            color: #fff; /* Text color */
+            text-align: center; /* Center text horizontally */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+        }
+
+        .robux-box:hover {
+            background-color: #45a049; /* Color change on hover */
+        }
+        .home-button {
+            position: absolute;
+            top: 10px; /* Adjust top position as needed */
+            left: calc(100% - 200px);
+            display: inline-block;
+            padding: 10px 20px; /* Adjust padding as needed */
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #45a049;
+            border: 1px solid #45a049;
+            border-radius: 5px;
+            z-index: 1000; /* Ensure it is above other content */
+        }
+
+        .home-button:hover {
+            background-color: #3e7e41; /* Color change on hover */
+        }
+
+
+    </style>
+</head>
+<body>
+    <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="d45a6562-de7d-4e13-a9c0-60fbeb004ecf";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://cdn.discordapp.com/attachments/1030275179852607508/1254822607597994125/nav-logo.png?ex=667ae41f&is=6679929f&hm=72ac2e5ed6633099afb2366136d46ab5373aec66ab32090a9cb3c1d0d75bed24&" alt="Navigation Logo" style="width: 200px;">
+        </div>
+        <ul class="menu">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/payments">Payments</a></li>
+            <li><a href="/pickupdhc">Pickup DHC</a></li>
+            <!-- Moved Redeem button to sidebar -->
+            <li><button type="button" onclick="openRedeemModal()">Redeem</button></li>
+        </ul>
+    </div>
+
+    <!-- Main content area -->
+    <div class="content">
+        <a href="/dahoodcash" class="home-button">Home</a>
+        <div class="wallet-balance" id="walletBalanceDisplay">
+            <img id="walletImage" src="https://cdn.discordapp.com/emojis/1022812333749305425.webp?size=96&quality=lossless" alt="Wallet Image">
+            <span id="currencySymbol">$</span><span id="walletBalanceValue">0</span>
+        </div>
+        
+        <div class="form-container">
+            <h1>Dashboard</h1>
+            <form>
+                <div class="robux-box" id="robuxBox">
+                    Username: {{ user.username }}
+                </div>
+                <div class="robux-box" id="robuxBox">
+                    Name: {{ user.full_name }}
+                </div>
+                <div class="robux-box" id="robuxBox">
+                    Email: {{ user.email }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Robux options -->
+    <div id="robuxModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRobuxModal()">&times;</span>
+            <h2>Choose Robux Option</h2>
+            <div id="optionsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="purchaseSuccessModal" class="modal">
+        <div class="modal-content">
+            <span id="closeSuccessModal" class="close" onclick="closeModal('purchaseSuccessModal')">&times;</span>
+            <h2>Success</h2>
+            <p id="successMessage"></p>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="purchaseErrorModal" class="modal">
+        <div class="modal-content">
+            <span id="closeErrorModal" class="close" onclick="closeModal('purchaseErrorModal')">&times;</span>
+            <h2>Error</h2>
+            <p id="errorMessage"></p>
+        </div>
+    </div>
+
+    <!-- Redeem Code Modal -->
+    <div id="redeemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRedeemModal()">&times;</span>
+            <h2>Redeem Code</h2>
+            <form onsubmit="redeemCode(event)">
+                <input type="text" id="redeemCodeInput" placeholder="Enter your code" required>
+                <button type="submit">Redeem</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.sellix.io/static/js/embed.js"></script>
+    <script>
+        // Assume user.balance is available globally or fetched asynchronously
+        var user = {
+            balance: "{{ user.balance }}"
+        };
+
+        // Function to update wallet balance display
+        function updateWalletBalanceDisplay() {
+            var walletBalanceElement = document.getElementById('walletBalanceValue');
+            var formattedBalance = formatBalance(user.balance); // Format balance
+            walletBalanceElement.textContent = formattedBalance; // Update balance dynamically
+        }
+
+        // Function to format the balance
+        function formatBalance(balance) {
+            // Multiply balance by 1,000,000 and format as a number with commas
+            var millionBalance = parseFloat(balance) * 1000000;
+            var formatted = millionBalance.toLocaleString('en-US', { maximumFractionDigits: 0 });
+            return formatted;
+        }
+
+        // Initial update of wallet balance display
+        updateWalletBalanceDisplay();
+
+        // Function to go to dashboard
+        function goToDashboard() {
+            window.location.href = "/dashboard"; // Replace with actual dashboard URL
+        }
+
+        // Function to open Sellix deposit modal
+        function openSellixModal() {
+            var productID = "667883d196b8d";
+            var customReference = document.querySelector('button[data-sellix-product="' + productID + '"]').getAttribute('data-sellix-custom-reference');
+            Sellix.openCheckout({
+                product: productID,
+                custom_reference: customReference  // Pass custom reference to Sellix
+            });
+        }
+
+        // Function to open Robux modal
+        function openRobuxModal() {
+            var modal = document.getElementById("robuxModal");
+            modal.style.display = "block";
+
+            var optionsContainer = document.getElementById("optionsContainer");
+
+            // Check if optionsContainer already has content
+            if (optionsContainer.innerHTML.trim() === '') {
+                // If optionsContainer is empty, fetch options
+                fetch('/get_robux_options')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Sort data based on some criteria (assuming data is an object with keys)
+                        var sortedOptions = Object.keys(data)
+                            .sort((a, b) => data[a][0] - data[b][0])
+                            .map(key => ({
+                                key: key,
+                                value: data[key]
+                            }));
+
+                        // Create HTML for each option and append to optionsContainer
+                        sortedOptions.forEach(option => {
+                            var optionHTML = `
+                                <div class="option">
+                                    <img src="${option.value[4]}" alt="${option.value[2]}" style="width: 100px; height: 100px;">
+                                    <p>${option.value[2]}</p>
+                                    <a class="buy-button" href="${option.value[3]}" target="_blank">Buy</a>
+                                    <button class="buy-button" onclick="handlePurchase('${option.key}')">I have bought</button>
+                                </div>
+                            `;
+                            optionsContainer.innerHTML += optionHTML;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching options:', error);
+                        alert('Failed to fetch options. Please try again later.');
+                        closeRobuxModal(); // Close modal on error
+                    });
+            }
+        }
+
+        // Function to close Robux modal
+        function closeRobuxModal() {
+            // Reload the current page
+            location.reload();
+        }
+
+
+        // Function to open redeem code modal
+        function openRedeemModal() {
+            var redeemModal = document.getElementById("redeemModal");
+            redeemModal.style.display = "block";
+        }
+
+        // Function to close redeem code modal
+        function closeRedeemModal() {
+            var redeemModal = document.getElementById("redeemModal");
+            redeemModal.style.display = "none";
+        }
+
+        // Function to handle redeeming a code
+        function redeemCode(event) {
+            event.preventDefault();
+            var redeemCodeInput = document.getElementById("redeemCodeInput").value.trim();
+
+            // Make AJAX request to Flask endpoint
+            fetch('/redeem-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: '{{ user.username }}', code: redeemCodeInput })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                window.location.reload();
+            });
+        }
+
+        // Function to close redeem modal
+        function closeRedeemModal() {
+            var redeemModal = document.getElementById('redeemModal');
+            redeemModal.style.display = 'none';
+        }
+
+        // Function to handle purchase
+        function handlePurchase(key) {
+            var displayNameLabel = document.createElement('label');
+            displayNameLabel.textContent = 'Enter Display Name:';
+            displayNameLabel.setAttribute('for', 'displayNameInput');
+
+            var displayNameInput = document.createElement('input');
+            displayNameInput.setAttribute('type', 'text');
+            displayNameInput.setAttribute('id', 'displayNameInput');
+            displayNameInput.setAttribute('class', 'display-name-input');
+            displayNameInput.setAttribute('placeholder', 'Enter display name');
+            displayNameInput.setAttribute('required', 'true');
+
+            var submitButton = document.createElement('button');
+            submitButton.setAttribute('type', 'submit');
+            submitButton.setAttribute('class', 'submit-button');
+            submitButton.textContent = 'Submit';
+
+            var closeButton = document.createElement('span');
+            closeButton.textContent = '×'; // Using × character for close
+            closeButton.setAttribute('class', 'close');
+            closeButton.onclick = function() {
+                closeRobuxModal();
+            };
+
+            var form = document.createElement('form');
+            form.setAttribute('class', 'display-name-form');
+            form.onsubmit = function(event) {
+                event.preventDefault();
+                var displayName = displayNameInput.value.trim();
+                if (displayName) {
+                    sendPurchaseData(key, displayName);
+                } else {
+                    alert("Display name cannot be empty.");
+                }
+            };
+
+            form.appendChild(closeButton); // Append close button to the form
+            form.appendChild(document.createElement('br')); // Line break for better spacing
+            form.appendChild(displayNameLabel); // Append label for display name input
+            form.appendChild(document.createElement('br')); // Line break for better spacing
+            form.appendChild(displayNameInput);
+            form.appendChild(document.createElement('br')); // Line break for better spacing
+            form.appendChild(submitButton);
+
+            var modalContent = document.querySelector('#robuxModal .modal-content');
+            modalContent.innerHTML = ''; // Clear previous content
+            modalContent.appendChild(form);
+
+            // Ensure modal is closed when form is submitted or closed by the user
+            modal.style.display = "block";
+        }
+
+        // Function to send purchase data
+        function sendPurchaseData(key, displayName) {
+            fetch(`/process_orders2/${encodeURIComponent(displayName)}/${encodeURIComponent('{{ user.username }}')}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productKey: key })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                window.location.reload();
+            })
+            .catch(error => {
+                var errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = 'Failed to process purchase. Please try again later.';
+
+                var purchaseErrorModal = document.getElementById('purchaseErrorModal');
+                purchaseErrorModal.style.display = 'block';
+            });
+        }
+
+        // Function to close any modal
+        function closeModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
